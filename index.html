@@ -1,0 +1,946 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mia's Three Happy Days</title>
+<style>
+:root{
+ --yellow:#fff0b3;
+ --pink:#ffdfeb;
+ --blue:#dff1ff;
+ --mint:#dff5e9;
+ --ink:#394353;
+ --accent:#c84f80;
+ --line:#eae7e3;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;background:#faf9f5;color:var(--ink);
+ font-family:"Trebuchet MS",Arial,"Malgun Gothic",sans-serif;
+ line-height:1.65;
+}
+header{
+ text-align:center;padding:30px 15px;
+ background:linear-gradient(110deg,#fff0b8,#ffe1e9,#d9f0ff);
+}
+header h1{font-size:clamp(26px,5vw,39px);margin:0}
+header p{margin:5px}
+main{max-width:950px;margin:auto;padding:18px}
+nav{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px}
+button{
+ border:0;border-radius:13px;padding:10px 15px;
+ font:inherit;font-weight:bold;cursor:pointer;
+}
+button:hover{filter:brightness(.97)}
+button:focus-visible,input:focus-visible,select:focus-visible{
+ outline:3px solid #82afe5;outline-offset:2px;
+}
+nav button{
+ flex:1;min-width:120px;background:white;
+ border:2px solid #f0eae8;
+}
+nav button.active{background:var(--yellow);border-color:#e8cb70}
+.panel{
+ background:white;border-radius:23px;padding:24px;
+ margin-bottom:18px;box-shadow:0 4px 18px #5b65700b;
+}
+.hidden{display:none!important}
+h2{margin-top:0}
+.sub{color:#77808e;font-size:14px}
+.primary{background:#f5c777}
+.pink-btn{background:var(--pink)}
+.blue-btn{background:var(--blue)}
+.mint-btn{background:var(--mint)}
+.controls{
+ display:flex;gap:8px;align-items:center;
+ flex-wrap:wrap;margin:15px 0;
+}
+select{
+ border:2px solid var(--line);border-radius:10px;
+ padding:9px;background:white;font:inherit;
+}
+.story-page{
+ border-radius:22px;padding:20px;
+ margin:20px 0;border:2px solid #f0ece5;
+}
+.yesterday{background:#fff8dc}
+.today{background:#fff0f5}
+.tomorrow{background:#eaf6ff}
+.story-heading{text-align:center}
+.illustration{
+ max-width:600px;margin:15px auto;
+ border-radius:20px;overflow:hidden;background:white;
+}
+.illustration svg{width:100%;height:auto;display:block}
+.story-text{
+ font-size:clamp(18px,3vw,22px);
+ line-height:2.15;background:#ffffffb5;
+ padding:18px;border-radius:17px;
+}
+.story-sentence{
+ display:block;margin:0 0 10px;
+ padding:3px 6px;border-radius:8px;
+}
+.story-sentence.focus{
+ background:#fff7c3;outline:2px solid #f4d881;
+}
+.word{display:inline;border-radius:5px;padding:2px 3px}
+.verb{
+ color:var(--accent);font-weight:900;
+ background:#ffe2ed;border-radius:5px;padding:2px 4px;
+}
+.word.verb{color:var(--accent);background:#ffe2ed;font-weight:900}
+.word.active{
+ color:#44320c!important;background:#ffda62!important;
+ font-weight:900;box-shadow:0 0 0 2px #ffdf87;
+}
+.word.done{opacity:.7}
+.translation{
+ font-size:15px;line-height:1.8;
+ color:#59677a;background:#ffffffb8;
+ border-left:4px solid #f3b7c9;
+ padding:10px 14px;border-radius:9px;
+ margin-top:10px;
+}
+.status{font-size:14px;color:#667384;min-height:24px}
+.grammar-set{
+ border:2px solid var(--line);
+ border-radius:20px;overflow:hidden;margin:18px 0;
+}
+.grammar-heading{
+ background:#fff9e7;padding:12px 17px;
+ display:flex;justify-content:space-between;
+ align-items:center;gap:10px;flex-wrap:wrap;
+}
+.grammar-heading h3{margin:0}
+.compare{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:10px;padding:12px;
+}
+.compare-card{
+ text-align:center;padding:15px 10px;
+ border-radius:15px;transition:box-shadow .2s;
+}
+.compare-card:nth-child(1){background:#fff3c9}
+.compare-card:nth-child(2){background:#ffe5ed}
+.compare-card:nth-child(3){background:#e0f2ff}
+.compare-card.reading{
+ outline:3px solid #f4b65e;
+ box-shadow:0 0 0 5px #fff0c0;
+}
+.compare-card .example{
+ font-size:19px;font-weight:bold;
+ margin:12px 0;line-height:1.7;
+}
+.tag{font-size:14px;font-weight:bold}
+.rule{
+ background:#eaf8f0;padding:15px 18px;
+ border-radius:15px;margin:12px;
+}
+.rule.reading{
+ outline:3px solid #8bcaa6;
+ background:#d9f3e5;
+}
+.rule p{margin:6px 0}
+.grammar-status{
+ padding:0 15px 12px;
+ font-size:14px;color:#687487;
+ min-height:26px;
+}
+.pattern-box{
+ background:#faf9fc;border-radius:16px;
+ padding:17px;margin:15px 0;
+}
+table{width:100%;border-collapse:collapse}
+th,td{
+ padding:10px;border-bottom:1px solid #e6e6ed;
+ text-align:left;
+}
+th{background:#fff4d8}
+td strong{color:var(--accent)}
+.quiz-section{
+ border-radius:19px;padding:18px;
+ margin:20px 0;border:2px solid var(--line);
+}
+.quiz-section.be{background:#fff5f8}
+.quiz-section.action{background:#f0f8ff}
+.word-bank{
+ background:#fff3bf;border:2px dashed #e6c76c;
+ border-radius:16px;padding:15px;margin:15px 0;
+}
+.word-bank h4{margin:0 0 9px}
+.bank-words{display:flex;gap:8px;flex-wrap:wrap}
+.bank-word{
+ background:white;color:#a84b72;font-weight:900;
+ padding:6px 13px;border-radius:10px;
+ border:1px solid #f2dda1;
+}
+.quiz-item{
+ background:white;padding:14px;border-radius:13px;
+ margin:11px 0;border:1px solid #ece8e4;
+}
+.quiz-item input{
+ width:135px;max-width:100%;padding:8px 10px;
+ font:inherit;border:2px solid #dedce2;border-radius:9px;
+}
+.quiz-item input.correct{
+ border-color:#64b78b;background:#e6faef;
+}
+.quiz-item input.wrong{
+ border-color:#e5a1a1;background:#fff1f1;
+}
+.feedback{font-size:14px;min-height:20px}
+.progress{
+ height:13px;border-radius:15px;
+ background:#eee;overflow:hidden;
+}
+.progress div{
+ height:100%;width:0%;background:#8acdae;
+ transition:width .25s;
+}
+footer{text-align:center;color:#89919a;padding:25px}
+@media(max-width:650px){
+ main{padding:10px}
+ .panel{padding:15px}
+ .story-page{padding:12px}
+ .compare{grid-template-columns:1fr}
+ .compare-card .example{font-size:20px}
+ th,td{padding:7px;font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🌼 Mia's Three Happy Days</h1>
+<p>Yesterday · Today · Tomorrow</p>
+<p>📖 Read · 🎧 Listen · 🗣️ Repeat · 🔍 Discover · ⭐ Practice</p>
+</header>
+
+<main>
+<nav>
+<button class="active" data-page="read">📖 Story Time</button>
+<button data-page="grammar">🔍 Grammar Detective</button>
+<button data-page="quiz">⭐ Quiz Time</button>
+</nav>
+
+<section id="read" class="panel">
+<h2>📖 Story Time</h2>
+<p>Let's read about Mia's happy days!</p>
+<p class="sub">
+분홍색 동사를 찾아보세요. Listen은 전체 이야기를 읽어주고,
+Repeat는 한 문장을 들려준 뒤 소리 없이 단어를 강조해요.
+</p>
+<div class="controls">
+<label for="speed">Speed:</label>
+<select id="speed">
+<option value="0.65">🐢 Slow</option>
+<option value="0.85" selected>🙂 Normal</option>
+<option value="1">🐇 Fast</option>
+</select>
+<button class="pink-btn" onclick="stopAll()">■ Stop</button>
+</div>
+<div id="storyContainer"></div>
+<button class="primary" onclick="showPage('grammar')">
+Next: Grammar Detective →
+</button>
+</section>
+
+<section id="grammar" class="panel hidden">
+<h2>🔍 Grammar Detective</h2>
+<p>What changes from yesterday to today to tomorrow?</p>
+<p class="sub">
+각 제목 옆의 Listen을 누르면 과거, 현재, 미래 문장을 차례대로 읽고
+Find the Pattern 설명도 영어로 읽어줘요.
+</p>
+<div id="grammarContainer"></div>
+<button class="primary" onclick="showPage('quiz')">
+Next: Quiz Time →
+</button>
+</section>
+
+<section id="quiz" class="panel hidden">
+<h2>⭐ Complete Mia's Story!</h2>
+<p>Choose the right verb from the Word Bank!</p>
+<p class="sub">
+be동사와 일반동사를 나누어 연습해요.
+힌트 상자의 단어를 보고 빈칸에 써 보세요.
+</p>
+<div class="progress"><div id="progressBar"></div></div>
+<p id="score" class="sub">Let's start!</p>
+<div id="quizContainer"></div>
+<div class="controls">
+<button class="primary" onclick="checkQuiz()">✓ Check Answers</button>
+<button class="blue-btn" onclick="resetQuiz()">↻ Try Again</button>
+</div>
+<div id="result" aria-live="polite"></div>
+</section>
+</main>
+
+<footer>🌷 A Little English Adventure 🌷</footer>
+
+<script>
+const pages=[
+{
+ id:"yesterday",
+ title:"🌞 Yesterday at the Park",
+ sentences:[
+  {text:"Yesterday was a sunny day.",verbs:["was"],
+   ko:"어제는 화창한 날이었어요."},
+  {text:"I was happy because it was Saturday.",verbs:["was","was"],
+   ko:"토요일이어서 나는 행복했어요."},
+  {text:"My friends were at the park.",verbs:["were"],
+   ko:"내 친구들은 공원에 있었어요."},
+  {text:"We played soccer together.",verbs:["played"],
+   ko:"우리는 함께 축구를 했어요."},
+  {text:"I kicked the ball, and my friends cheered.",verbs:["kicked","cheered"],
+   ko:"내가 공을 찼고 친구들은 환호했어요."},
+  {text:"We were very happy!",verbs:["were"],
+   ko:"우리는 정말 행복했어요!"}
+ ]
+},
+{
+ id:"today",
+ title:"🏫 Today at School",
+ sentences:[
+  {text:"Today is Monday.",verbs:["is"],
+   ko:"오늘은 월요일이에요."},
+  {text:"I am happy to see my friends again.",verbs:["am"],
+   ko:"친구들을 다시 만나서 나는 행복해요."},
+  {text:"My friend Ben is at school.",verbs:["is"],
+   ko:"내 친구 벤은 학교에 있어요."},
+  {text:"We are in the classroom.",verbs:["are"],
+   ko:"우리는 교실에 있어요."},
+  {text:"I play with my friends at break time.",verbs:["play"],
+   ko:"나는 쉬는 시간에 친구들과 놀아요."},
+  {text:"Ben plays soccer every day.",verbs:["plays"],
+   ko:"벤은 매일 축구를 해요."},
+  {text:"We talk about our fun Saturday.",verbs:["talk"],
+   ko:"우리는 즐거웠던 토요일에 관해 이야기해요."}
+ ]
+},
+{
+ id:"tomorrow",
+ title:"🌈 Tomorrow's Plan",
+ sentences:[
+  {text:"Tomorrow will be Tuesday.",verbs:["will be"],
+   ko:"내일은 화요일일 거예요."},
+  {text:"I will be happy to see Ben again.",verbs:["will be"],
+   ko:"나는 벤을 다시 만나서 행복할 거예요."},
+  {text:"My friends will be at school, too.",verbs:["will be"],
+   ko:"내 친구들도 학교에 있을 거예요."},
+  {text:"We will play soccer after school.",verbs:["will play"],
+   ko:"우리는 방과 후에 축구를 할 거예요."},
+  {text:"I will kick the ball, and Ben will cheer!",
+   verbs:["will kick","will cheer"],
+   ko:"나는 공을 찰 거고 벤은 환호할 거예요!"},
+  {text:"It will be another fun day!",verbs:["will be"],
+   ko:"또 다른 즐거운 하루가 될 거예요!"}
+ ]
+}
+];
+
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",
+  '"':"&quot;","'":"&#39;"
+ })[c]);
+}
+
+function verbRanges(text,verbs){
+ const ranges=[];
+ let from=0;
+ for(const verb of verbs){
+  const pos=text.toLowerCase().indexOf(verb.toLowerCase(),from);
+  if(pos>=0){
+   ranges.push({start:pos,end:pos+verb.length});
+   from=pos+verb.length;
+  }
+ }
+ return ranges;
+}
+
+function highlightedText(text,verbs){
+ const ranges=verbRanges(text,verbs);
+ let result="",pos=0;
+ for(const r of ranges){
+  result+=escapeHTML(text.slice(pos,r.start));
+  result+='<span class="verb">'+
+   escapeHTML(text.slice(r.start,r.end))+'</span>';
+  pos=r.end;
+ }
+ return result+escapeHTML(text.slice(pos));
+}
+
+function illustration(type){
+ const sky=type==="yesterday"?"#d8f0ff":
+           type==="today"?"#ffe9f1":"#dcecff";
+ const ground=type==="today"?"#c9eacb":"#bfe7bb";
+ const common=`
+ <rect width="600" height="310" fill="${sky}"/>
+ <circle cx="515" cy="55" r="31" fill="#ffe29a"/>
+ <path d="M0 245 Q160 210 310 245 T600 235 V310 H0Z" fill="${ground}"/>
+ <g fill="white" opacity=".9">
+ <ellipse cx="95" cy="65" rx="50" ry="18"/>
+ <ellipse cx="123" cy="57" rx="35" ry="20"/>
+ <ellipse cx="365" cy="60" rx="48" ry="18"/>
+ </g>`;
+ const child=(x,y,shirt,hair="#6c4a38")=>`
+ <g transform="translate(${x},${y})">
+ <path d="M-12 90 L-18 123 M12 90 L18 123"
+ stroke="#58667c" stroke-width="10" stroke-linecap="round"/>
+ <path d="M-22 45 Q0 33 22 45 L18 93 H-18Z" fill="${shirt}"/>
+ <path d="M-15 53 L-35 80 M15 53 L35 80"
+ stroke="#e4ad8a" stroke-width="9" stroke-linecap="round"/>
+ <circle cy="20" r="25" fill="#f2c39e"/>
+ <path d="M-25 18 Q-29 -15 0 -12 Q30 -12 25 18
+ Q12 1 -3 5 Q-13 16 -25 18" fill="${hair}"/>
+ <circle cx="-9" cy="22" r="2.5" fill="#4d3e37"/>
+ <circle cx="9" cy="22" r="2.5" fill="#4d3e37"/>
+ <path d="M-7 34 Q0 40 8 34" fill="none"
+ stroke="#a45b55" stroke-width="2.5" stroke-linecap="round"/>
+ </g>`;
+ let scene="";
+ if(type==="yesterday"){
+  scene=`
+  <rect x="30" y="160" width="20" height="92" fill="#ae815d"/>
+  <circle cx="40" cy="140" r="55" fill="#9ed7a4"/>
+  <circle cx="14" cy="162" r="34" fill="#aee0ac"/>
+  ${child(190,118,"#f5a5bb")}
+  ${child(385,118,"#90bdf0","#473e39")}
+  <circle cx="290" cy="259" r="24" fill="white" stroke="#566879" stroke-width="3"/>
+  <path d="M290 244 L300 252 L296 266 L283 266 L279 252Z" fill="#566879"/>`;
+ }else if(type==="today"){
+  scene=`
+  <rect x="110" y="65" width="380" height="185" rx="12"
+  fill="#fff4cf" stroke="#dfbb93" stroke-width="5"/>
+  <rect x="125" y="45" width="350" height="45" rx="10" fill="#f4aebd"/>
+  <text x="300" y="76" text-anchor="middle"
+  font-size="24" font-weight="bold" fill="#634e58">SCHOOL</text>
+  <rect x="250" y="165" width="100" height="85" rx="6" fill="#b6d9ef"/>
+  <rect x="150" y="113" width="65" height="52" rx="6" fill="#d6f1ff"/>
+  <rect x="385" y="113" width="65" height="52" rx="6" fill="#d6f1ff"/>
+  ${child(205,166,"#f5a5bb")}
+  ${child(400,166,"#91baf0","#473e39")}`;
+ }else{
+  scene=`
+  <path d="M40 247 Q160 215 300 250 T560 250"
+  fill="none" stroke="#f8f5e9" stroke-width="38"/>
+  <rect x="480" y="150" width="17" height="105" fill="#b88b64"/>
+  <circle cx="488" cy="135" r="49" fill="#a5dcae"/>
+  ${child(210,130,"#f5a5bb")}
+  ${child(370,130,"#91baf0","#473e39")}
+  <circle cx="295" cy="260" r="20" fill="white"
+  stroke="#64768c" stroke-width="3"/>
+  <path d="M295 248 L304 255 L300 268 L288 268 L284 255Z"
+  fill="#64768c"/>
+  <path d="M290 65 Q270 40 255 62 Q245 83 290 105
+  Q335 83 325 62 Q310 40 290 65Z" fill="#f7b6c9"/>`;
+ }
+ return `<svg viewBox="0 0 600 310" role="img"
+ aria-label="Mia and her friends"
+ xmlns="http://www.w3.org/2000/svg">
+ ${common}${scene}</svg>`;
+}
+
+function storyWordHTML(sentence,pi,si){
+ const text=sentence.text;
+ const ranges=verbRanges(text,sentence.verbs);
+ return [...text.matchAll(/\S+/g)].map((m,wi)=>{
+  const start=m.index,end=start+m[0].length;
+  const isVerb=ranges.some(r=>start<r.end&&end>r.start);
+  return `<span class="word ${isVerb?"verb":""}"
+   id="w${pi}_${si}_${wi}">${escapeHTML(m[0])}</span>`;
+ }).join(" ");
+}
+
+function renderStory(){
+ document.getElementById("storyContainer").innerHTML=
+ pages.map((p,pi)=>`
+ <article class="story-page ${p.id}">
+  <h3 class="story-heading">${p.title}</h3>
+  <div class="illustration">${illustration(p.id)}</div>
+  <div class="story-text">
+   ${p.sentences.map((s,si)=>`
+    <div class="story-sentence" id="sentence${pi}_${si}">
+     ${storyWordHTML(s,pi,si)}
+    </div>
+   `).join("")}
+  </div>
+  <div class="controls">
+   <button class="blue-btn" onclick="listenStory(${pi})">🔊 Listen</button>
+   <button class="pink-btn" onclick="repeatStory(${pi})">🗣️ Repeat</button>
+   <button class="mint-btn" onclick="toggleTranslation(${pi})"
+    id="translateButton${pi}">🇰🇷 한국말 보기</button>
+   <button class="mint-btn" onclick="stopAll()">■ Stop</button>
+  </div>
+  <div class="translation hidden" id="translation${pi}">
+   ${p.sentences.map(s=>`<div>${escapeHTML(s.ko)}</div>`).join("")}
+  </div>
+  <div class="status" id="status${pi}" aria-live="polite">
+   Listen, then repeat the story aloud!
+  </div>
+ </article>`).join("");
+}
+
+function toggleTranslation(pi){
+ const el=document.getElementById("translation"+pi);
+ const btn=document.getElementById("translateButton"+pi);
+ const isHidden=el.classList.toggle("hidden");
+ btn.textContent=isHidden?"🇰🇷 한국말 보기":"🇰🇷 한국말 숨기기";
+}
+
+let speechVersion=0;
+let repeatTimer=null;
+let activeUtterance=null;
+let waitTimer=null;
+
+function stopAll(){
+ speechVersion++;
+ if(repeatTimer!==null){
+  clearInterval(repeatTimer);repeatTimer=null;
+ }
+ if(waitTimer!==null){
+  clearTimeout(waitTimer);waitTimer=null;
+ }
+ if("speechSynthesis" in window)window.speechSynthesis.cancel();
+ activeUtterance=null;
+ document.querySelectorAll(".word").forEach(w=>{
+  w.classList.remove("active","done");
+ });
+ document.querySelectorAll(".story-sentence").forEach(s=>{
+  s.classList.remove("focus");
+ });
+ document.querySelectorAll(".compare-card,.rule").forEach(e=>{
+  e.classList.remove("reading");
+ });
+}
+
+function showPage(id){
+ stopAll();
+ document.querySelectorAll("main section").forEach(s=>{
+  s.classList.toggle("hidden",s.id!==id);
+ });
+ document.querySelectorAll("nav button").forEach(b=>{
+  b.classList.toggle("active",b.dataset.page===id);
+ });
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll("nav button").forEach(b=>{
+ b.onclick=()=>showPage(b.dataset.page);
+});
+
+function getVoice(){
+ if(!("speechSynthesis" in window))return null;
+ const voices=window.speechSynthesis.getVoices();
+ return voices.find(v=>v.lang.toLowerCase().startsWith("en-us"))
+  ||voices.find(v=>v.lang.toLowerCase().startsWith("en"))
+  ||null;
+}
+
+function speakText(text,version,onBoundary,onDone){
+ if(version!==speechVersion)return;
+ if(!("speechSynthesis" in window)){
+  if(onDone)onDone();
+  return;
+ }
+ const utter=new SpeechSynthesisUtterance(text);
+ utter.lang="en-US";
+ utter.rate=Number(document.getElementById("speed").value);
+ utter.pitch=1;
+ const voice=getVoice();
+ if(voice)utter.voice=voice;
+ activeUtterance=utter;
+ utter.onboundary=e=>{
+  if(version!==speechVersion)return;
+  if(onBoundary)onBoundary(e);
+ };
+ utter.onend=()=>{
+  if(version!==speechVersion)return;
+  activeUtterance=null;
+  if(onDone)onDone();
+ };
+ utter.onerror=e=>{
+  if(version!==speechVersion)return;
+  activeUtterance=null;
+  if(e.error!=="canceled"&&onDone)onDone();
+ };
+ window.speechSynthesis.speak(utter);
+}
+
+function storySentenceWords(pi,si){
+ return [...pages[pi].sentences[si].text.matchAll(/\S+/g)]
+ .map((m,wi)=>({
+  start:m.index,end:m.index+m[0].length,
+  el:document.getElementById(`w${pi}_${si}_${wi}`)
+ }));
+}
+
+function paintSentence(pi,si,index){
+ const words=storySentenceWords(pi,si);
+ pages[pi].sentences.forEach((_,j)=>{
+  document.getElementById(`sentence${pi}_${j}`)
+   .classList.toggle("focus",j===si);
+ });
+ document.querySelectorAll(".story-text .word").forEach(w=>{
+  w.classList.remove("active","done");
+ });
+ words.forEach((w,i)=>{
+  w.el.classList.toggle("active",i===index);
+  w.el.classList.toggle("done",i<index);
+ });
+}
+
+function listenStory(pi){
+ stopAll();
+ const version=speechVersion;
+ const status=document.getElementById("status"+pi);
+ if(!("speechSynthesis" in window)){
+  status.textContent="Speech is not supported in this browser.";
+  return;
+ }
+ status.textContent="👂 Listen to each sentence.";
+ function next(si){
+  if(version!==speechVersion)return;
+  if(si>=pages[pi].sentences.length){
+   clearStoryFocus();
+   status.textContent="🌟 Finished! Now try Repeat.";
+   return;
+  }
+  const text=pages[pi].sentences[si].text;
+  const words=storySentenceWords(pi,si);
+  paintSentence(pi,si,-1);
+  document.getElementById(`sentence${pi}_${si}`).classList.add("focus");
+  speakText(text,version,e=>{
+   if(e.name&&e.name!=="word")return;
+   const index=words.findIndex(w=>e.charIndex>=w.start&&e.charIndex<w.end);
+   if(index>=0)paintSentence(pi,si,index);
+  },()=>{
+   if(version!==speechVersion)return;
+   waitTimer=setTimeout(()=>next(si+1),350);
+  });
+ }
+ next(0);
+}
+
+function clearStoryFocus(){
+ document.querySelectorAll(".story-sentence").forEach(s=>{
+  s.classList.remove("focus");
+ });
+ document.querySelectorAll(".story-text .word").forEach(w=>{
+  w.classList.remove("active","done");
+ });
+}
+
+/*
+ Repeat sequence:
+ 1. Speak one sentence.
+ 2. Silent word highlighting for the learner.
+ 3. Speak the next sentence.
+*/
+function repeatStory(pi){
+ stopAll();
+ const version=speechVersion;
+ const status=document.getElementById("status"+pi);
+ if(!("speechSynthesis" in window)){
+  status.textContent="Speech is not supported in this browser.";
+  return;
+ }
+ function nextSentence(si){
+  if(version!==speechVersion)return;
+  if(si>=pages[pi].sentences.length){
+   clearStoryFocus();
+   status.textContent="🏆 Great job! You repeated the whole story!";
+   return;
+  }
+  const text=pages[pi].sentences[si].text;
+  const words=storySentenceWords(pi,si);
+  status.textContent=`👂 Listen to sentence ${si+1}.`;
+  paintSentence(pi,si,-1);
+  speakText(text,version,e=>{
+   if(e.name&&e.name!=="word")return;
+   const index=words.findIndex(w=>e.charIndex>=w.start&&e.charIndex<w.end);
+   if(index>=0)paintSentence(pi,si,index);
+  },()=>{
+   if(version!==speechVersion)return;
+   silentRepeat(si,words);
+  });
+ }
+ function silentRepeat(si,words){
+  if(version!==speechVersion)return;
+  status.textContent=`🎤 Your turn! Repeat sentence ${si+1}.`;
+  let index=0;
+  const speed=Number(document.getElementById("speed").value);
+  const interval=Math.round(750/speed);
+  paintSentence(pi,si,0);
+  repeatTimer=setInterval(()=>{
+   if(version!==speechVersion)return;
+   index++;
+   if(index>=words.length){
+    clearInterval(repeatTimer);
+    repeatTimer=null;
+    paintSentence(pi,si,-1);
+    waitTimer=setTimeout(()=>nextSentence(si+1),600);
+    return;
+   }
+   paintSentence(pi,si,index);
+  },interval);
+ }
+ nextSentence(0);
+}
+
+/* Grammar comparisons and spoken pattern explanations. */
+const comparisons=[
+{
+ title:"😊 1. How do I feel?",
+ lines:[
+  ["I was happy yesterday.","was"],
+  ["I am happy today.","am"],
+  ["I will be happy tomorrow.","will be"]
+ ],
+ rule:"I + was → I + am → I + will be",
+ englishRule:"Find the pattern! Yesterday, I was happy. Today, I am happy. Tomorrow, I will be happy. The be verb changes with time.",
+ koreanRule:"I와 함께 과거에는 was, 현재에는 am, 미래에는 will be를 사용해요."
+},
+{
+ title:"👫 2. Where are my friends?",
+ lines:[
+  ["My friends were at the park yesterday.","were"],
+  ["My friends are at the park today.","are"],
+  ["My friends will be at the park tomorrow.","will be"]
+ ],
+ rule:"My friends + were → are → will be",
+ englishRule:"Find the pattern! Yesterday, my friends were at the park. Today, my friends are at the park. Tomorrow, my friends will be at the park. Listen to were, are, and will be.",
+ koreanRule:"여러 친구들을 나타내는 My friends는 과거에 were, 현재에 are, 미래에 will be를 사용해요."
+},
+{
+ title:"⚽ 3. What do I do?",
+ lines:[
+  ["I played soccer yesterday.","played"],
+  ["I play soccer today.","play"],
+  ["I will play soccer tomorrow.","will play"]
+ ],
+ rule:"I + played → play → will play",
+ englishRule:"Find the pattern! Yesterday, I played soccer. Today, I play soccer. Tomorrow, I will play soccer. We add E D for the past, and use will play for the future.",
+ koreanRule:"play는 과거에 played, 현재에 play, 미래에 will play로 바뀌어요."
+},
+{
+ title:"🌟 4. What does Ben do?",
+ lines:[
+  ["Ben played soccer yesterday.","played"],
+  ["Ben plays soccer today.","plays"],
+  ["Ben will play soccer tomorrow.","will play"]
+ ],
+ rule:"Ben + played → plays → will play",
+ englishRule:"Find the pattern! Yesterday, Ben played soccer. Today, Ben plays soccer. Tomorrow, Ben will play soccer. With Ben, we say plays in the present. After will, we say play.",
+ koreanRule:"Ben처럼 한 명을 나타내는 주어는 현재에 plays를 사용해요. 미래에는 will play예요."
+}
+];
+
+function renderGrammar(){
+ const labels=["🕒 Yesterday","☀️ Today","🚀 Tomorrow"];
+ document.getElementById("grammarContainer").innerHTML=
+ comparisons.map((g,gi)=>`
+ <article class="grammar-set">
+  <div class="grammar-heading">
+   <h3>${g.title}</h3>
+   <button class="blue-btn" onclick="listenGrammar(${gi})">🔊 Listen</button>
+  </div>
+  <div class="compare">
+   ${g.lines.map(([text,verb],li)=>`
+    <div class="compare-card" id="grammarCard${gi}_${li}">
+     <div class="tag">${labels[li]}</div>
+     <div class="example">${highlightedText(text,[verb])}</div>
+    </div>
+   `).join("")}
+  </div>
+  <div class="rule" id="grammarRule${gi}">
+   <strong>💡 Find the Pattern!</strong>
+   <p>${highlightedText(g.rule,
+    gi===0?["was","am","will be"]:
+    gi===1?["were","are","will be"]:
+    gi===2?["played","play","will play"]:
+    ["played","plays","will play"])}</p>
+   <p class="sub">${g.koreanRule}</p>
+  </div>
+  <div class="grammar-status" id="grammarStatus${gi}" aria-live="polite">
+   Press Listen to hear all three sentences and the pattern.
+  </div>
+ </article>`).join("")+`
+ <h3>🌼 Let's Remember!</h3>
+ <div class="pattern-box">
+  <h3>1. Be Verbs</h3>
+  <table>
+   <tr><th>Who?</th><th>Yesterday</th><th>Today</th><th>Tomorrow</th></tr>
+   <tr><td>I</td><td><strong>was</strong></td><td><strong>am</strong></td><td><strong>will be</strong></td></tr>
+   <tr><td>He / She</td><td><strong>was</strong></td><td><strong>is</strong></td><td><strong>will be</strong></td></tr>
+   <tr><td>You</td><td><strong>were</strong></td><td><strong>are</strong></td><td><strong>will be</strong></td></tr>
+   <tr><td>We / They</td><td><strong>were</strong></td><td><strong>are</strong></td><td><strong>will be</strong></td></tr>
+  </table>
+ </div>
+ <div class="pattern-box">
+  <h3>2. Action Verbs</h3>
+  <table>
+   <tr><th>Who?</th><th>Yesterday</th><th>Today</th><th>Tomorrow</th></tr>
+   <tr><td>I / You / We / They</td><td><strong>played</strong></td><td><strong>play</strong></td><td><strong>will play</strong></td></tr>
+   <tr><td>He / She / Ben</td><td><strong>played</strong></td><td><strong>plays</strong></td><td><strong>will play</strong></td></tr>
+  </table>
+  <p class="sub">play → played처럼 과거에 -ed를 붙이는 동사를 규칙동사라고 해요.</p>
+ </div>
+ <div class="rule">
+  ⭐ Yesterday: 과거형<br>
+  ⭐ Today: 현재형<br>
+  ⭐ Tomorrow: will + 동사 기본형
+ </div>`;
+}
+
+function listenGrammar(gi){
+ stopAll();
+ const version=speechVersion;
+ const g=comparisons[gi];
+ const status=document.getElementById("grammarStatus"+gi);
+ if(!("speechSynthesis" in window)){
+  status.textContent="Speech is not supported in this browser.";
+  return;
+ }
+ function next(li){
+  if(version!==speechVersion)return;
+  if(li>=3){
+   document.getElementById("grammarRule"+gi).classList.add("reading");
+   status.textContent="💡 Listen to Find the Pattern!";
+   speakText(g.englishRule,version,null,()=>{
+    if(version!==speechVersion)return;
+    document.getElementById("grammarRule"+gi).classList.remove("reading");
+    status.textContent="🌟 Great! You found the pattern!";
+   });
+   return;
+  }
+  const card=document.getElementById(`grammarCard${gi}_${li}`);
+  card.classList.add("reading");
+  status.textContent=`🔊 Listening: ${
+   li===0?"Yesterday":li===1?"Today":"Tomorrow"
+  }`;
+  speakText(g.lines[li][0],version,null,()=>{
+   if(version!==speechVersion)return;
+   card.classList.remove("reading");
+   waitTimer=setTimeout(()=>next(li+1),400);
+  });
+ }
+ next(0);
+}
+
+/* Be verb and action verb quizzes. */
+const quizzes=[
+{
+ id:"be",title:"💗 Part 1. Be Verb Quiz",
+ words:["was","were","am","is","are","will be"],
+ items:[
+  ["I ___ happy because it was Saturday.","was","Yesterday"],
+  ["My friends ___ at the park.","were","Yesterday"],
+  ["I ___ happy to see my friends again.","am","Today"],
+  ["My friend Ben ___ at school.","is","Today"],
+  ["We ___ in the classroom.","are","Today"],
+  ["I ___ happy to see Ben again.","will be","Tomorrow"],
+  ["My friends ___ at school, too.","will be","Tomorrow"]
+ ]
+},
+{
+ id:"action",title:"💙 Part 2. Action Verb Quiz",
+ words:["played","kicked","cheered","play","plays","talk",
+        "will play","will kick","will cheer"],
+ items:[
+  ["We ___ soccer together.","played","Yesterday"],
+  ["I ___ the ball, and my friends cheered.","kicked","Yesterday"],
+  ["I kicked the ball, and my friends ___.","cheered","Yesterday"],
+  ["I ___ with my friends at break time.","play","Today"],
+  ["Ben ___ soccer every day.","plays","Today"],
+  ["We ___ about our fun Saturday.","talk","Today"],
+  ["We ___ soccer after school.","will play","Tomorrow"],
+  ["I ___ the ball, and Ben will cheer!","will kick","Tomorrow"],
+  ["I will kick the ball, and Ben ___!","will cheer","Tomorrow"]
+ ]
+}
+];
+
+function renderQuiz(){
+ document.getElementById("quizContainer").innerHTML=
+ quizzes.map(q=>`
+ <article class="quiz-section ${q.id}">
+  <h3>${q.title}</h3>
+  <div class="word-bank">
+   <h4>💡 Word Bank — Hint Box</h4>
+   <p class="sub">Look at these words and fill in the blanks!</p>
+   <div class="bank-words">
+    ${q.words.map(w=>`<span class="bank-word">${escapeHTML(w)}</span>`).join("")}
+   </div>
+  </div>
+  ${q.items.map(([sentence,answer,time],i)=>{
+   const [before,after]=sentence.split("___");
+   return `
+    <div class="quiz-item">
+     <div class="sub">${time} · Question ${i+1}</div>
+     <p style="font-size:18px">
+      ${escapeHTML(before)}
+      <input id="${q.id}${i}" autocomplete="off"
+       spellcheck="false" aria-label="${q.id} question ${i+1}">
+      ${escapeHTML(after)}
+     </p>
+     <div class="feedback" id="f${q.id}${i}" aria-live="polite"></div>
+    </div>`;
+  }).join("")}
+ </article>`).join("");
+}
+
+function normalize(s){
+ return s.trim().toLowerCase().replace(/\s+/g," ");
+}
+function checkQuiz(){
+ let correct=0,total=0;
+ quizzes.forEach(q=>q.items.forEach((item,i)=>{
+  total++;
+  const input=document.getElementById(q.id+i);
+  const feedback=document.getElementById("f"+q.id+i);
+  const ok=normalize(input.value)===normalize(item[1]);
+  input.classList.toggle("correct",ok);
+  input.classList.toggle("wrong",!ok);
+  if(ok){
+   correct++;
+   feedback.textContent="🌟 Great! Correct!";
+   feedback.style.color="#25835a";
+  }else{
+   feedback.textContent="💛 Try again! Check the Word Bank.";
+   feedback.style.color="#b35b5b";
+  }
+ }));
+ document.getElementById("progressBar").style.width=
+  (correct/total*100)+"%";
+ document.getElementById("score").textContent=
+  `Your Score: ${correct} / ${total}`;
+ document.getElementById("result").innerHTML=correct===total
+  ?"<div class='rule'><h3>🏆 Amazing!</h3>You are a Grammar Star! ⭐</div>"
+  :"<div class='rule'>🌷 Good try! Check the Word Banks and try again.</div>";
+}
+function resetQuiz(){
+ quizzes.forEach(q=>q.items.forEach((_,i)=>{
+  const input=document.getElementById(q.id+i);
+  input.value="";
+  input.classList.remove("correct","wrong");
+  document.getElementById("f"+q.id+i).textContent="";
+ }));
+ document.getElementById("progressBar").style.width="0%";
+ document.getElementById("score").textContent="Let's start!";
+ document.getElementById("result").innerHTML="";
+}
+
+renderStory();
+renderGrammar();
+renderQuiz();
+
+window.addEventListener("beforeunload",()=>{
+ if("speechSynthesis" in window)window.speechSynthesis.cancel();
+});
+</script>
+</body>
+</html>
